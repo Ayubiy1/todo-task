@@ -1,0 +1,11 @@
+.task {
+  border: 1px solid transparent;
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.task:hover {
+  border-top: 1px solid rgba(128, 128, 128, 0.474) !important;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.474) !important;
+  transition: 0.5s;
+}
