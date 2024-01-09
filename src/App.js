@@ -38,7 +38,7 @@ const App = () => {
     setIsModalOpen(false);
   };
 
-  const { data } = useQuery("lists-data", () => {
+  const { data, isLoading: dataIsLoading } = useQuery("lists-data", () => {
     return axios.get("http://localhost:3001/lists");
   });
 
@@ -62,51 +62,74 @@ const App = () => {
   return (
     <div className="h-[100vh] flex items-center justify-center">
       {contextHolder}
-      {data?.data.map((list, index) => {
-        return (
-          <div key={index} className="min-w-[300px] px-1">
-            <div
-              className="rounded-xl bg-white pb-2"
-              style={{
-                boxShadow: "1px 0px 11px -2px rgba(34, 60, 80, 0.32)",
-              }}
-            >
-              <div className="mt-5 p-3 flex items-center justify-between">
-                <Typography>{list?.listName}</Typography>
 
-                <Dropdown
-                  overlay={
-                    <Menu>
-                      <Menu.Item
-                        onClick={() => {
-                          handleOk();
-                          setListData(list);
-                        }}
-                        key={"1"}
-                      >
-                        <EditOutlined />
-                        edit
-                      </Menu.Item>
-                    </Menu>
-                  }
-                  placement="bottomCenter"
-                  arrow
-                >
-                  <a onClick={(e) => e.preventDefault()}>
-                    <Space>
-                      <FaEllipsisVertical />
-                    </Space>
-                  </a>
-                </Dropdown>
-              </div>
+      {!dataIsLoading &&
+        data?.data.map((list, index) => {
+          return (
+            <div key={index} className="min-w-[300px] px-1">
+              <div
+                className="rounded-xl bg-white pb-2"
+                style={{
+                  boxShadow: "1px 0px 11px -2px rgba(34, 60, 80, 0.32)",
+                }}
+              >
+                <div className="mt-5 p-3 flex items-center justify-between">
+                  <Typography>{list?.listName}</Typography>
 
-              <div>
-                <Tasks listId={list?.id} />
+                  <Dropdown
+                    overlay={
+                      <Menu>
+                        <Menu.Item
+                          onClick={() => {
+                            handleOk();
+                            setListData(list);
+                          }}
+                          key={"1"}
+                        >
+                          <EditOutlined />
+                          edit
+                        </Menu.Item>
+                      </Menu>
+                    }
+                    placement="bottomCenter"
+                    arrow
+                  >
+                    <a onClick={(e) => e.preventDefault()}>
+                      <Space>
+                        <FaEllipsisVertical />
+                      </Space>
+                    </a>
+                  </Dropdown>
+                </div>
+
+                <div>
+                  <Tasks listId={list?.id} />
+                </div>
               </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      {dataIsLoading && (
+        <>
+          <svg
+            class="spinner"
+            width="65px"
+            height="65px"
+            viewBox="0 0 66 66"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              class="path"
+              fill="none"
+              stroke-width="6"
+              stroke-linecap="round"
+              cx="33"
+              cy="33"
+              r="30"
+            ></circle>
+          </svg>
+        </>
+      )}
 
       <Modal
         title="Basic Modal"
