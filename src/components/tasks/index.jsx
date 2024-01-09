@@ -17,6 +17,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import "./style.css";
 import { useForm } from "antd/es/form/Form";
 import { useState } from "react";
+import { api } from "../api";
 
 const Tasks = () => {
   const [form] = useForm();
@@ -41,11 +42,11 @@ const Tasks = () => {
   };
 
   const { data } = useQuery("tasks-data", () => {
-    return axios.get("http://localhost:3001/tasks");
+    return api.get("tasks");
   });
   const { mutate: taskPost } = useMutation(
     (newData) => {
-      return axios.post("http://localhost:3001/tasks", newData);
+      return api.post("tasks", newData);
     },
     {
       onSuccess: () => {
@@ -56,7 +57,7 @@ const Tasks = () => {
   );
   const { mutate: pustTask, isLoading } = useMutation(
     (newData) => {
-      return axios.put(`http://localhost:3001/tasks/${taskData?.id}`, newData);
+      return api.put(`tasks/${taskData?.id}`, newData);
     },
     {
       onSuccess: () => {
@@ -68,7 +69,7 @@ const Tasks = () => {
   );
   const { mutate: deleteTask } = useMutation(
     (id) => {
-      return axios.delete(`http://localhost:3001/tasks/${id}`);
+      return api.delete(`tasks/${id}`);
     },
     {
       onSuccess: () => {

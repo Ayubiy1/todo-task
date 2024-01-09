@@ -16,6 +16,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { FaEllipsisVertical } from "react-icons/fa6";
 import { useForm } from "antd/es/form/Form";
 import Tasks from "./components/tasks";
+import { api } from "./components/api";
 
 const App = () => {
   const [form] = useForm();
@@ -39,12 +40,12 @@ const App = () => {
   };
 
   const { data, isLoading: dataIsLoading } = useQuery("lists-data", () => {
-    return axios.get("http://localhost:3001/lists");
+    return api.get("lists");
   });
 
   const { mutate: pustList, isLoading } = useMutation(
     (newData) => {
-      return axios.put(`http://localhost:3001/lists/${listData?.id}`, newData);
+      return api.put(`lists/${listData?.id}`, newData);
     },
     {
       onSuccess: () => {

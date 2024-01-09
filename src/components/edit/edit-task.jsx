@@ -3,6 +3,7 @@ import { Button, Form, Input, Modal } from "antd";
 import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
 import { useForm } from "antd/es/form/Form";
+import { api } from "../api";
 
 const EditTask = ({ setIsModalOpen, isModalOpen, taskData }) => {
   const [form] = useForm();
@@ -10,7 +11,7 @@ const EditTask = ({ setIsModalOpen, isModalOpen, taskData }) => {
 
   const { mutate } = useMutation(
     (newData) => {
-      return axios.get(`http://localhost:3001/tasks/${taskData?.id}`, newData);
+      return api.get(`tasks/${taskData?.id}`, newData);
     },
     {
       onSuccess: () => {
