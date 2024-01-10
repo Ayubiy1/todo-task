@@ -75,7 +75,13 @@ const App = () => {
                 }}
               >
                 <div className="mt-5 p-3 flex items-center justify-between">
-                  <Typography>{list?.listName}</Typography>
+                  <Typography>
+                    {!dataIsLoading || isLoading ? (
+                      list?.listName
+                    ) : (
+                      <>Loading...</>
+                    )}
+                  </Typography>
 
                   <Dropdown
                     overlay={

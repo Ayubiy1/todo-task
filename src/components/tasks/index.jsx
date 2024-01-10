@@ -118,7 +118,7 @@ const Tasks = () => {
         </Form.Item>
       </Form>
 
-      {postLoading || deleteLoading ? (
+      {postLoading || deleteLoading || dataLoading ? (
         <Typography className="text-center">Loading...</Typography>
       ) : (
         data?.data.map((task, index) => {
