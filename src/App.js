@@ -76,7 +76,7 @@ const App = () => {
               >
                 <div className="mt-5 p-3 flex items-center justify-between">
                   <Typography>
-                    {!dataIsLoading || isLoading ? (
+                    {!dataIsLoading || !isLoading ? (
                       list?.listName
                     ) : (
                       <>Loading...</>
