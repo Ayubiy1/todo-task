@@ -41,10 +41,10 @@ const Tasks = () => {
     setIsModalOpen(false);
   };
 
-  const { data } = useQuery("tasks-data", () => {
+  const { data, isLoading: dataLoading } = useQuery("tasks-data", () => {
     return api.get("tasks");
   });
-  const { mutate: taskPost } = useMutation(
+  const { mutate: taskPost, isLoading: postLoading } = useMutation(
     (newData) => {
       return api.post("tasks", newData);
     },
@@ -67,7 +67,7 @@ const Tasks = () => {
       },
     }
   );
-  const { mutate: deleteTask } = useMutation(
+  const { mutate: deleteTask, isLoading: deleteLoading } = useMutation(
     (id) => {
       return api.delete(`tasks/${id}`);
     },
@@ -118,52 +118,56 @@ const Tasks = () => {
         </Form.Item>
       </Form>
 
-      {data?.data.map((task, index) => {
-        return (
-          <div
-            key={index}
-            className="px-2 py-1 my-1 flex items-center justify-between rounded-sm bg-white task"
-          >
-            <Typography>{task?.taskName}</Typography>
-            <Dropdown
-              overlay={
-                <Menu>
-                  <Menu.Item
-                    onClick={() => {
-                      setIsModalOpen(true);
-                      setTaskData(task);
-                      form.setFieldValue("taskName", task.taskName);
-                    }}
-                    key={"1"}
-                  >
-                    <EditOutlined />
-                    edit
-                  </Menu.Item>
-
-                  <Menu.Item
-                    key={"2"}
-                    onClick={() => {
-                      deleteTask(task?.id);
-                    }}
-                    className="text-red-600"
-                  >
-                    <DeleteOutlined />
-                    delete
-                  </Menu.Item>
-                </Menu>
-              }
-              placement="top"
-              arrow
+      {postLoading || deleteLoading ? (
+        <>Loading...</>
+      ) : (
+        data?.data.map((task, index) => {
+          return (
+            <div
+              key={index}
+              className="px-2 py-1 my-1 flex items-center justify-between rounded-sm bg-white task"
             >
-              <a onClick={(e) => e.preventDefault()}>
-                <Space>
-                  <FaEllipsisVertical />
-                </Space>
-              </a>
-            </Dropdown>
-          </div>
-        );
-      })}
+              <Typography>{task?.taskName}</Typography>
+              <Dropdown
+                overlay={
+                  <Menu>
+                    <Menu.Item
+                      onClick={() => {
+                        setIsModalOpen(true);
+                        setTaskData(task);
+                        form.setFieldValue("taskName", task.taskName);
+                      }}
+                      key={"1"}
+                    >
+                      <EditOutlined />
+                      edit
+                    </Menu.Item>
+
+                    <Menu.Item
+                      key={"2"}
+                      onClick={() => {
+                        deleteTask(task?.id);
+                      }}
+                      className="text-red-600"
+                    >
+                      <DeleteOutlined />
+                      delete
+                    </Menu.Item>
+                  </Menu>
+                }
+                placement="top"
+                arrow
+              >
+                <a onClick={(e) => e.preventDefault()}>
+                  <Space>
+                    <FaEllipsisVertical />
+                  </Space>
+                </a>
+              </Dropdown>
+            </div>
+          );
+        })
+      )}
 
       <Modal
         title="Basic Modal"
